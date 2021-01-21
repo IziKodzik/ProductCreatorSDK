@@ -4,6 +4,11 @@ public class Item {
 	private int weight;
 
 
+	public Item(String[] split){
+		this(Integer.parseInt(split[0])
+		,Integer.parseInt(split[1]));
+
+	}
 	public Item(int id, int weight) {
 		this.id = id;
 		this.weight = weight;
