@@ -9,9 +9,16 @@ public class ItemConsumer {
 	}
 
 	public boolean consumeItem(){
-		storage.getItem();
+			Item item = storage.getItem();
+			if(item == null)
+				return false;
+			sum += item.getWeight();
+			++consumed;
+			if(consumed % 100 == 0)
+				System.out.println(String.format("Consumed %d items.",consumed));
 
 		return true;
+
 	}
 
 

@@ -5,10 +5,17 @@ public class Storage {
 
 	Stack<Item> items = new Stack<>();
 	volatile boolean created = false;
+	volatile boolean done = false;
 
 	public Storage(){}
 
-	public synchronized void addItem(){
+	public synchronized void end(){
+		done = true;
+		created = true;
+		notifyAll();
+	}
+
+	public synchronized void addItem(Item item){
 
 		while (created){
 			try {
@@ -17,23 +24,30 @@ public class Storage {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("set");
+		if(done)
+			return;
+		items.add(item);
 		created = !created;
 		notifyAll();
 
 
 	}
-	public synchronized void getItem() {
-		while (!created){
+	public synchronized Item getItem() {
+		while (!created ){
 			try {
 				wait();
 			}catch (InterruptedException e){
 				e.printStackTrace();
 			}
 		}
-		System.out.println("get");
+		if(done)
+			return null;
+
+		Item i = items.pop();
 		created = !created;
 		notifyAll();
+
+		return i;
 	}
 
 
